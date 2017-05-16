@@ -8,6 +8,8 @@
 
 makeCacheMatrix <- function(x = matrix()) {
   inv <- NULL
+  # Usage of the special operator <<- which assign a value to an object
+  # from a different environment.
   set <- function(y) {
     x <<- y
     inv <<- NULL
@@ -15,6 +17,7 @@ makeCacheMatrix <- function(x = matrix()) {
   get <- function() x
   setinverse <- function(inverse) inv <<- inverse
   getinverse <- function() inv
+  # Returned list of different objects of this function.
   list(set = set, get = get,
        setinverse = setinverse,
        getinverse = getinverse)
