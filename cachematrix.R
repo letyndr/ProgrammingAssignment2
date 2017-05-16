@@ -1,20 +1,20 @@
 ## This functions calculate the inverse of a matrix using cache to avoid
-## extra calculations. In this assignment is used <<- operator which can
-## be used to assign a value to an object in an environment that is 
+## extra calculations. In this assignment it was used <<- operator which 
+## can be used to assign a value to an object in an environment that is 
 ## different from the current environment. 
 
 ## This function receives a matrix and assign the values passed through
 ## the functions set and setinverse to the correspondance values.
 
 makeCacheMatrix <- function(x = matrix()) {
-  m <- NULL
+  inv <- NULL
   set <- function(y) {
     x <<- y
-    m <<- NULL
+    inv <<- NULL
   }
   get <- function() x
-  setinverse <- function(inverse) m <<- inverse
-  getinverse <- function() m
+  setinverse <- function(inverse) inv <<- inverse
+  getinverse <- function() inv
   list(set = set, get = get,
        setinverse = setinverse,
        getinverse = getinverse)
@@ -22,18 +22,33 @@ makeCacheMatrix <- function(x = matrix()) {
 
 
 ## This function receives a matrix object and if the inverse of the matrix
-## is already calculated the function prints the result, otherwise it calculates
-## the inverse and print it.
+## was already calculated, the function prints the result, otherwise it 
+## calculates the inverse and prints it.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-  m <- x$getinverse()
-  if(!is.null(m)) {
+  
+  inv <- x$getinverse()
+  # if the inverse is already computed it just returns the inverse.
+  if(!is.null(inv)) {
     message("getting cached data")
     return(m)
   }
+  # If the inverse is not calculated (otherwise we could recover the value),
+  # get the original matrix and store in data.
   data <- x$get()
-  m <- solve(data)
-  x$setinverse(m)
-  m
+  # Calculate the inverse.
+  inv <- solve(data)
+  # Set the inverse matrix.
+  x$setinverse(inv)
+  # Return the inverse.
+  inv
 }
+
+# Output sample:
+# 
+# > source("cachematrix.R")
+# > m1 <- makeCacheMatrix(matrix(c(4, 2, 7, 6), 2, 2))
+# > cacheSolve(m1)
+#       [,1] [,2]
+# [1,]  0.6 -0.7
+# [2,] -0.2  0.4
